@@ -999,8 +999,10 @@ export class LookupPuck {
     const icon = document.createElementNS(SVG_NS, 'svg');
     icon.setAttribute('version', '1.0');
     icon.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-    icon.setAttribute('width', '550.000000pt');
-    icon.setAttribute('height', '550.000000pt');
+    // Use inline styles to enforce size - these have highest specificity
+    // and won't be overridden by page CSS
+    icon.style.width = '25px';
+    icon.style.height = '25px';
     icon.setAttribute('viewBox', '0 0 550.000000 550.000000');
     icon.setAttribute('preserveAspectRatio', 'xMidYMid meet');
 
