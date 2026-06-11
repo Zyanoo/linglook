@@ -1,26 +1,27 @@
 name: Build Chrome Extension
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
   pull_request:
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    name: Build Chrome Extension
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
+      - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 10
+          version: latest
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -28,17 +29,15 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+        env:
+          RELEASE_BUILD: 1
 
-      - name: Build
-        run: pnpm build
+      - name: Build Chrome extension
+        run: pnpm package:chrome
 
-      - name: Package extension
-        run: |
-          cd dist
-          zip -r ../linglook-chrome-extension.zip .
-
-      - name: Upload artifact
+      - name: Upload Chrome extension
         uses: actions/upload-artifact@v4
         with:
-          name: linglook-chrome-extension
-          path: linglook-chrome-extension.zip
+          name: linglook-chrome-${{ github.sha }}
+          path: web-ext-artifacts/*.zip
+          if-no-files-found: error
