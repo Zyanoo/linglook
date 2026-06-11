@@ -28,11 +28,10 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: |
-          echo "approve-builds=true" >> .npmrc
-          pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
         env:
           RELEASE_BUILD: 1
+          NPM_CONFIG_APPROVE_BUILDS: true
 
       - name: Build Chrome extension
         run: pnpm package:chrome
